@@ -26,6 +26,10 @@
     "url": "https://github.com/mamboer/vr/issues"
   },
   "homepage": "https://github.com/mamboer/vr",
+  "meta":{
+    "js":"dist/js/vr.min.js",
+    "css":"dist/css/vr.css"
+  },
   "devDependencies": {
     "express": "^4.12.3",
     "gulp": "^3.8.11",
