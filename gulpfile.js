@@ -86,14 +86,14 @@ gulp.task('reload',['js','css','copy'],function(){
 
 gulp.task('js',['lint','swig'],function(){
 
-    return gulp.src( 'dist/js/'+ cfg.js.name )
-        .pipe(gulp.dest('site/dist/js'))
+    return gulp.src(['./src/libs/modernizr.js', './src/libs/jquery.js', '../src/libs/jquery.cookie.js'])
+        .pipe(concat('libs.js'))
+        .pipe(gulp.dest('./src/libs/')
+        .pipe(gulp.dest('./site/js/'))
         .pipe(uglify({preserveComments:'some'}))
-        .pipe(rename( cfg.js.minName ))
-        .pipe(gulp.dest('dist/js'))
-        .pipe(gulp.dest('site/dist/js'));
-   
-    
+        .pipe(rename( 'libs.min.js' ))
+        .pipe(gulp.dest('./src/libs/')
+        .pipe(gulp.dest('./site/js/'));
 });
 
 gulp.task('swig',function(){
@@ -102,26 +102,33 @@ gulp.task('swig',function(){
         .pipe(rename('bower.json'))
         .pipe(gulp.dest(__dirname));
     
-    gulp.src(['*.html'])
+    gulp.src(['./src/*.html'])
         .pipe(swig(swigOpts))
         .pipe(gulp.dest('site'));
 
     return gulp.src(cfg.js.src)
         .pipe(swig(swigOpts))
         .pipe(rename(cfg.js.name))
-        .pipe(gulp.dest('dist/js'));
+        .pipe(gulp.dest('site/js'))
+        .pipe(uglify({preserveComments:'some'}))
+        .pipe(rename( cfg.js.minName ))
+        .pipe(gulp.dest('site/js'));
     
 });
 
 gulp.task('copy',function(){
-    var siteFiles = ['package.json','dist/**'];
+    var siteFiles = ['package.json','src/libs/semantic-ui/**'];
     gulp.src(siteFiles,{base:'.'})
-        .pipe(gulp.dest('site'));
+        .pipe(gulp.dest('site/libs/semantic-ui'));
 
-    gulp.src(['src/vendors/**'],{base:'src'})
-        .pipe(gulp.dest('dist'))
-        .pipe(gulp.dest('site/dist'));
+    gulp.src(['src/css/**'],{base:'src'})
+        .pipe(gulp.dest('site/css'));
    
+    gulp.src(['src/fonts/**'],{base:'src'})
+        .pipe(gulp.dest('site/fonts'));
+
+    gulp.src(['src/img/**'],{base:'src'})
+        .pipe(gulp.dest('site/img'));
 
 });
 

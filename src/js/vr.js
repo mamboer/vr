@@ -1,130 +1,214 @@
-/*!
- * {{name}} {{version}}
- * {{description}}
- * @Author {{author|raw}} 
- */
-/*jshint browser: true, strict: true, undef: true */
-/*global define: false */
-(function (root, factory) {
-    
-    if (typeof define === 'function' && define.amd) {
-        // AMD. Register as an anonymous module.
-        define(['jquery','mintpl'], factory );
-    } else {
-        // Browser globals
-        root.VR = factory(root.jQuery, root.mintpl);
+if (top != self) { top.location.replace(self.location.href); }
+
+window.resizer = {
+  ensureValidProtocol: function(el, event) {
+    var $el = $(el);
+    var protocol = $el.val().substring(0,4);
+    var regex = new RegExp(":\/\/");
+    if(regex.test($el.val()) && protocol != 'http') {
+      alert("Invalid protocol detected. Unfortunately, only HTTP and HTTPS protocols will work  =(");
+      $el.focus().select();
+      event.stopPropagation();
+      event.preventDefault();
     }
-}(this, function ($, T) {
+  }
+};
 
-    'use strict';
+function createBookmarklet() {
+  var title = document.title;
+  var address =  window.location.href;
+  if(window.sidebar) {
+    window.sidebar.addPanel(title,address);
+  } else if(window.external) {
+    window.external.AddFavorite(address,title);
+  } else if(window.opera && window.print) {
+    var elem = document.createElement('a');
+    elem.setAttribute('href',address);
+    elem.setAttribute('title',title);
+    elem.setAttribute('rel','sidebar');
+    elem.click();
+  }
+}
 
-    var tplHead = new T.heredoc(function(){/*
-        <title><%=title%></title>
-        <meta charset="utf-8"/>
-        <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE9, chrome=1"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
-        <link rel="stylesheet" href="<%=css%>"/>
-        <style type="text/css" media="print"></style>
-        <style></style>
-    */}); 
+function setupBookmarkLinks() {
+  $('[rel="bookmark"]').attr('href', "javascript:document.location='"+document.location+"?url=' + document.location.href;");
+}
 
-    var tplBody = new T.heredoc(function(){/*
-        <script src="<%=js%>"></script>
-        <div id="vrNotice" class="vr-notice">
-            <div class="vrn-inner">
-                <div class="vrn-well">
-                    <a id="vrBookmarklet" data-text="<%=bookmarkText%>"><span><%=bookmarkTitle%></span></a>
-                    <span class="vr-hide"><%=updateText%></span>
-                </div>
-                <dl class="vrn-meta">
-                    <dt><%=versionText%></dt>
-                    <dd><%=name%> (<%=version%>)</dd>
-                    <dt>User Agent</dt>
-                    <dd data-pro="userAgent"><%=userAgent%></dd>
-                    <dt>Meta Viewport</dt>
-                    <dd data-pro="viewport"><%=viewport%></dd>
-                </dl>
-                <div class="vr-muted">
-                    <%=aboutText%>: <a href="<%=homepage%>" target="_blank"><%=name%></a> is designed by <%=author%> (&copy;) <%=copyrightTime%>
-                </div>
-            </div>
-        </div>
-        <div id="vrToolbar" data-resizer="basic" class="vr-toolbar">
-            <ul id="vrDevices" class="vr-devices">
-                <li><a data-viewport="auto" data-icon="auto" title="Auto Size" class="">Auto Size</a></li>
-                <li><a data-viewport="320x480" data-version="4" data-icon="iphone" class="portrait" title="iPhone 4">iPhone 4</a></li>
-                <li><a data-viewport="320x568" data-version="5" data-icon="iphone" class="portrait active" title="iPhone 5">iPhone 5</a></li>
-                <li><a data-viewport="375x667" data-version="6" data-icon="iphone" class="portrait" title="iPhone 6">iPhone 6</a></li>
-                <li><a data-viewport="414x736" data-version="6+" data-icon="iphone" class="portrait" title="iPhone 6+">iPhone 6+</a></li>
-            </ul>
-            <ul id="vrTools" class="vr-tools">
-                <li class="activeAdd">
-                    <label for="vrEdit" data-icon="edit" title="<%=customSizeText%>"><span><%=customizeText%>:</span></label>
-                    <input id="vrEdit" type="text" value=""/>
-                    <a id="vrAdd" data-viewport="530x736" data-icon="add" title="<%=customizeText%>" class="vr-custom">530x736</a>
-                </li>
-                <li class="vr-info">
-                    <b id="vrDeviceName" data-pro="deviceName">iPhone 5</b>
-                    <span data-pro="deviceMeta">Size: 320x568 (Portrait), Ratio: 40:71</span>
-                </li>
-            </ul>
-            <ul id="vrExtras" class="vr-extras">
-                <li><a title="<%=animateViewportText%>"><%=animateText%></a></li>
-                <li>
-                    <a data-icon="reload" title="<%=reloadCurrentPageText%>"></a>
-                </li>
-                <li>
-                    <a data-icon="print" title="<%=printViewportText%>"></a>
-                </li>
-                <li>
-                    <a data-icon="hint" title="<%=informationText%>"></a>
-                </li>
-                <li>
-                    <a data-icon="close" title="<%=closeToolbarText%>"></a>
-                </li>
-            </ul>
-        </div>
-        <div id="vrContainer" class="vr-transition">
-            <div id="vrPhantom" class="vr-phantom"></div>
-            <div id="vrWrapper" class="vr-wrapper">
-                <iframe id="vrFrame" class="vr-frame" name="content" frameborder="0" src="about:blank"></iframe>
-                <i id="handle-e" class="vr-handle-e"></i>
-                <i id="handle-s" class="vr-handle-s"></i>
-                <i id="handle-w" class="vr-handle-w"></i>
-                <i id="handle-se" class="vr-handle-se"></i>
-                <i id="handle-sw" class="vr-handle-sw"></i>
-            </div>
-        </div>
-    */});
+function getParameterByName(name) {
+  name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+  var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+      results = regex.exec(location.search);
+  return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
 
-    var api = {
-        data: {
-            'name':'{{name}}',
-            'version':'{{version}}',
-            'js':'{{meta.js}}',
-            'css':'{{meta.css}}',
-            'author':'{{author}}',
-            'versionText':'Version',
-            'bookmarkText':'Your Bookmarket',
-            'bookmarkTitle':'↔ Resizer',
-            'updateText':' has been changed. Please save or update your bookmarklet.',
-            'aboutText':'About',
-            'copyrightTime':'2015 - ' + new Date().getFullYear(),
-            'customSizeText':'Custom Size',
-            'customizeText':'Customize',
-            'animateViewportText':'Animate Viewport',
-            'animateText':'Animate',
-            'reloadCurrentPageText':'Reload Current Page',
-            'printViewportText':'Print Viewport',
-            'informationText':'Information',
-            'closeToolbarText':'Close',
-            'userAgent': (typeof navigator.userAgent === "undefined" ? 'N/A' : navigator.userAgent),
-        },
-        init: function(){
-            
-        } 
-    };
+$(document).ready(function() {
 
-    return api;
+  setupBookmarkLinks();
 
-}));
+  if(getParameterByName('url').length > 0) {
+    urlParam = getParameterByName('url');
+    if(urlParam.substr(0,4) != 'http') {
+      urlParam = 'http://' + urlParam;
+    }
+    window.resizer.url = urlParam;
+    $('[name="url"]').val(window.resizer.url);
+    $('iframe#resizerFrame').attr('src',window.resizer.url);
+    $('.index-page').hide();
+    $('.resizer-page').show();
+  }
+
+  $('body').on('click', 'button[data-viewport-width]', function(e) {
+    if($(this).attr('data-viewport-width') == '100%') {
+      newWidth = '100%';
+    }else{
+      newWidth = $(this).attr('data-viewport-width');
+    }
+    if($(this).attr('data-viewport-height') == '100%') {
+      newHeight = '100%';
+    }else{
+      newHeight = $(this).attr('data-viewport-height');
+    }
+    $('button[data-viewport-width]').removeClass('asphalt active').addClass('charcoal');
+    $(this).addClass('asphalt active').removeClass('charcoal');
+    $.cookie('device', $(this).attr('data-device'));
+    $('#resizerFrame').css({
+      'max-width': newWidth,
+      'max-height': newHeight
+    });
+    e.preventDefault();
+    return false;
+  });
+
+  $('body').on('click', 'button.rotate', function(e) {
+    $('button[data-rotate=true]').each(function() {
+      $(this).toggleClass('landscape');
+      width = $(this).attr('data-viewport-width');
+      height = $(this).attr('data-viewport-height');
+      $(this).attr('data-viewport-width', height);
+      $(this).attr('data-viewport-height', width);
+      if($(this).hasClass('active')) {
+        $(this).trigger('click');
+        if( $(this).hasClass('landscape') ) {
+          $.cookie('orientation', 'landscape');
+        }else{
+          $.removeCookie('orientation');
+        }
+      }
+    });
+  });
+
+  $('body').on('click', 'button.refresh', function(e) {
+    $(this).find('i[class*="icon-"]').addClass('icon-rotate-360');
+    document.getElementById('resizerFrame').contentWindow.location.reload();
+  });
+
+  var triggerClose = function() {
+    if($('#closeResizer').length) {
+      closeResizer();
+    }else{
+      document.location = $('.close').attr('href');
+    }
+  };
+
+  var closeResizer = function() {
+    newWidth = $(window).width();
+    newHeight = $(window).height();
+    $('button[data-viewport-width]').removeClass('asphalt active').addClass('charcoal');
+    $('#resizerFrame').css({
+      'max-width': newWidth,
+      'max-height': newHeight
+    });
+    $('#resizer').fadeOut(500, function() {
+      document.location = document.getElementById("resizerFrame").contentWindow.location.href;
+    });
+  }
+
+  $('body').on('click', '#closeResizer', function(e) {
+    closeResizer();
+  });
+
+  $('body').on('click', '[data-toggle]', function(e) {
+    var $el = $($(this).attr('data-toggle'));
+    $el.slideToggle(150, function() {
+      if($el.is(':visible')) {
+        $el.find('[name="url"]').focus().select();
+      }
+    });
+  });
+
+  $(document).on('keyup', function(e) {
+    switch(e.keyCode) {
+      case 27:
+        $('[data-toggle]').first().trigger('click');
+        break;
+      case 49:
+        $('[data-device="fullscreen"]').trigger('click');
+        break;
+      case 50:
+        $('[data-device="desktop"]').trigger('click');
+        break;
+      case 51:
+        $('[data-device="macbook"]').trigger('click');
+        break;
+      case 52:
+        $('[data-device="ipad"]').trigger('click');
+        break;
+      case 53:
+        $('[data-device="tablet"]').trigger('click');
+        break;
+      case 54:
+        $('[data-device="android"]').trigger('click');
+        break;
+      case 55:
+        $('[data-device="iphone"]').trigger('click');
+        break;
+      case 32:
+      case 56:
+      case 82:
+        $('.rotate').trigger('click');
+        break;
+      case 88:
+        triggerClose();
+        break;
+    }
+  });
+
+  $('body').on('keyup', 'input', function(e) {
+    if(e.keyCode == 27) {
+      $('[data-toggle]').first().trigger('click');
+      $('[name="url"]').val(window.resizer.url);
+    }
+    e.stopPropagation();
+  });
+
+  $('body').on('keypress', '[name="url"]', function(e) {
+    if(e.keyCode == 13) {
+      window.resizer.ensureValidProtocol($(this), e);
+    }
+  });
+
+  $('body').on('click', 'button[type="submit"]', function(e) {
+    window.resizer.ensureValidProtocol($(this).parents('form').find('[name="url"]'), e);
+  });
+
+  $('body').on('click', '[rel="bookmark"]', function(e) {
+    e.preventDefault();
+    return false;
+  });
+
+  $('form').on('submit', function(e) {
+    if($(this).find('url').val() == '') {
+      e.preventDefault();
+      e.stopPropagation();
+      return false;
+    }
+  });
+
+  if( $.cookie('device') ) {
+    $('[data-device="'+$.cookie('device')+'"]').trigger('click');
+  }
+  if( $.cookie('orientation') == 'landscape' ) {
+    $('.rotate').trigger('click');
+  }
+
+});
