@@ -9,10 +9,12 @@ var $win = $(W),
 var VR = {
     ensureValidProtocol: function($el, evt) {
         var protocol = $el.val().substring(0,4),
+        $parent = $el.parent(),
         regex = new RegExp(":\/\/");
+        $parent.removeClass('error');
         if(regex.test($el.val()) && protocol != 'http') {
-            alert("Invalid protocol detected. Unfortunately, only HTTP and HTTPS protocols will work  =(");
             $el.focus().select();
+            $parent.addClass('error');
             evt.stopPropagation();
             evt.preventDefault();
         }
@@ -43,6 +45,13 @@ var VR = {
         delete this.init;
         //setup bookmarks   
         $('[rel="bookmark"]').attr('href', "javascript:document.location='"+document.location+"?url=' + document.location.href;");
+        this.$loader = $('#vrLoader');
+        this.$frame = $('#vrFrame');
+        initEvts();
+        this.parseUrl();
+        restoreFromCookie();
+    },
+    parseUrl:function(){
         // parse url parameter
         var urlParam = this.url = this.getParameterByName('url');
         if(urlParam.length > 0) {
@@ -51,12 +60,19 @@ var VR = {
             }
             this.url = urlParam;
             $('[name="url"]').val(this.url);
-            $('#vrFrame').attr('src',this.url);
+            this.showLoader();
+            this.$frame.attr('src',this.url);
             $('#indexPage').hide();
-            $('#vrpage').show();
+            $('#vrPage').show();
         }
-        initEvts();
-        restoreFromCookie();
+    },
+    showLoader:function(){
+        this.$frame.addClass('hidden'); 
+        this.$loader.removeClass('hidden');
+    },
+    hideLoader:function(){
+        this.$frame.removeClass('hidden');
+        this.$loader.addClass('hidden');
     }
 
 };
@@ -77,7 +93,7 @@ var restoreFromCookie = function(){
 var initEvts = function() {
 
     var $viewports = $('button[data-viewport-width]'),
-        $frame = $('#vrFrame'),
+        $frame =VR.$frame,
         $rotateViewports = $('button[data-rotate=true]'),
         $vr = $('#vr');
 
@@ -91,7 +107,7 @@ var initEvts = function() {
     closeResizer = function() {
         var newWidth = $win.width(),
             newHeight = $win.height();
-        $viewports.removeClass('asphalt active').addClass('charcoal');
+        $viewports.removeClass('active');
         $frame.css({
             'max-width': newWidth,
             'max-height': newHeight
@@ -101,14 +117,18 @@ var initEvts = function() {
         });
     };
 
+    $frame.on('load',function(e){
+        VR.hideLoader();
+    });
+
     $body.on('click', 'button[data-viewport-width]', function(e) {
         var newWidth = this.getAttribute('data-viewport-width'),
             newHeight = this.getAttribute('data-viewport-height'),
             $this = $(this),
             device = this.getAttribute('data-device');
 
-        $viewports.removeClass('asphalt active').addClass('charcoal');
-        $this.addClass('asphalt active').removeClass('charcoal');
+        $viewports.removeClass('active');
+        $this.addClass('active');
         $.cookie('vr-device', device);
         $frame.css({
             'max-width': newWidth,
@@ -135,6 +155,7 @@ var initEvts = function() {
         });
     }).on('click', 'button.refresh', function(e) {
         $(this).find('i[class*="icon-"]').addClass('icon-rotate-360');
+        VR.showLoader();
         $frame[0].contentWindow.location.reload(true);
     }).on('click', '#closeResizer', function(e) {
         closeResizer();
@@ -201,7 +222,11 @@ var initEvts = function() {
 
 
     $('form').on('submit', function(e) {
-        if($(this).find('[name="url"]').val() === '') {
+        var $url = $(this).find(['name="url"']),
+            $urlParent = $url.parent();
+        $urlParent.removeClass('error');
+        if($url.val() === '') {
+            $urlParent.addClass('error');
             e.preventDefault();
             e.stopPropagation();
             return false;

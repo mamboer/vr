@@ -15,7 +15,7 @@ var gulp = require('gulp'),
 
 
 var cfg = {
-    EXPRESS_PORT : 4000,
+    EXPRESS_PORT : 3004,
     EXPRESS_ROOT : __dirname,
     LIVERELOAD_PORT : 35729,
     js:{
@@ -32,10 +32,13 @@ var swigOpts = {
 };
 
 gulp.task('express', function() {
+    
     var express = require('express');
     var app = express();
     app.use(express.static(cfg.EXPRESS_ROOT));
     app.listen(cfg.EXPRESS_PORT);
+
+    console.log('View your files at: http://localhost:'+cfg.EXPRESS_PORT);    
 });
 
 
@@ -87,8 +90,11 @@ gulp.task('reload',['js','css','copy'],function(){
 
 gulp.task('js',['lint','swig'],function(){
 
-    return gulp.src(['./src/libs/modernizr.js', './src/libs/jquery.js', './src/libs/jquery.cookie.js'])
-        .pipe(concat('libs.js'))
+    return gulp.src([
+        './src/libs/modernizr.js', 
+        './src/libs/jquery.js', 
+        './src/libs/jquery.cookie.js'
+    ]).pipe(concat('libs.js'))
         .pipe(gulp.dest('./src/libs/'))
         .pipe(gulp.dest('./site/js/'))
         .pipe(gulp.dest('./dist/js/'))

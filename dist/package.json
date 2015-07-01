@@ -3,8 +3,11 @@
   "version": "1.0.0",
   "title": "Viewport Resizer For Testing Responsive Layouts",
   "description": "VR(Viewport Resizer) Is A Front-end Device Emulator For Simulating Renderring HTML Pages In Kinds of Mobile Devices.",
-  "main": ["dist/js/vr.js","dist/css/vr.css"],
-  "baiduTJCode":"3650191bfe834b10e62ed8843451d33e",
+  "main": [
+    "dist/js/vr.js",
+    "dist/css/vr.css"
+  ],
+  "baiduTJCode": "3650191bfe834b10e62ed8843451d33e",
   "scripts": {
     "test": "mocha"
   },
@@ -26,9 +29,9 @@
     "url": "https://github.com/mamboer/vr/issues"
   },
   "homepage": "https://github.com/mamboer/vr",
-  "meta":{
-    "js":"dist/js/vr.min.js",
-    "css":"dist/css/vr.css"
+  "meta": {
+    "js": "dist/js/vr.min.js",
+    "css": "dist/css/vr.css"
   },
   "devDependencies": {
     "express": "^4.12.3",
@@ -45,5 +48,6 @@
     "gulp-uglify": "^1.1.0",
     "gulp-sourcemaps": "^1.5.1",
     "jshint-stylish": "^1.0.1"
-  }
+  },
+  "dependencies": {}
 }

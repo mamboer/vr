@@ -12,7 +12,6 @@
     <link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/apple-touch-icon-114x114-precomposed.png"/>
     <link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/apple-touch-icon-72x72-precomposed.png"/>
     <link rel="apple-touch-icon-precomposed" href="images/apple-touch-icon-precomposed.png"/>
-    <link type="text/css" rel="stylesheet" href="libs/semantic-ui/semantic.min.css"/>
     <link type="text/css" rel="stylesheet" href="css/vr.css"/>
     <!--Libs-->
     <script src="js/libs.js"></script>
@@ -20,52 +19,48 @@
 
 <body>
 
-    <div id="indexPage" class="ui vertical segment index-page">
+    <div id="indexPage" class="index-page">
 
-        <form action="./" method="get">
-            <div class="ui grid container">
-                <div class="column center aligned"> 
-                    <h1 class="logo"><img src="img/icon128-2x.png" alt="vr"/></h1>
-                </div>
+        <div class="container">
+            <div class="center-text"> 
+                <h1 class="logo"><img src="img/icon128-2x.png" alt="vr"/></h1>
             </div>
-            <div class="ui grid container">
-                <div class="column center aligned">
-                    <div class="flex-wrapper ipt-box">
-                         <div class="pad-right ipt-box-licon vc">
-                            <label for="url2" class="vc-item"><i class="fa fa-globe icon-4x"></i></label>
-                        </div>
-                        <div class="flex-box ui massive fluid input ipt-box-bd">
-                            <input type="text" class="ipt-url" autofocus tabindex="1" id="url2" name="url" placeholder="http://www.faso.me" />
-                        </div>
-                        <div class="pad-left ipt-box-ricon vc">
-                            <button type="submit" class="vc-item btn-icon-only" tabindex="2"><i class="fa fa-arrow-circle-right icon-4x"></i></button>
-                        </div>
+        </div>
+        <div class="container">
+            <form action="./" method="get">
+                <div class="flex-wrapper center-text ipt-box">
+                     <div class="pad-right ipt-box-licon vc">
+                        <label for="url2" class="vc-item"><i class="fa fa-globe font-3x"></i></label>
+                    </div>
+                    <div class="flex-box ipt-box-bd" title="Only support HTTP or HTTPS protocals">
+                        <input type="text" class="ipt-url font-big" autofocus tabindex="1" id="url2" name="url" placeholder="http://www.faso.me" required/>
+                    </div>
+                    <div class="pad-left ipt-box-ricon vc">
+                        <button type="submit" class="vc-item icon-wrap" tabindex="2"><i class="fa fa-arrow-circle-right font-3x"></i></button>
                     </div>
                 </div>
+            </form>
+        </div>
+        <div class="container">
+            <h2 class="center-text vr-title">Viewport Resizer For Testing Responsive Layouts</h2>
+        </div>
+     
+        <div class="container">
+            
+            <div class="center-text">
+                <a class="lnk-github" role="button" href="https://github.com/mamboer/vr" title="github@mamboer/vr" target="_blank"><i class="fa fa-github"></i>&nbsp;v1.0.0</a>
             </div>
-            <div class="ui grid container">
-                <div class="column center aligned">
-                    <h2 class="ui inverted header vr-title">Viewport Resizer For Testing Responsive Layouts</h2>
-                </div>
-            </div>
-         
-            <div class="ui grid container">
-                
-                <div class="column center aligned">
-                    <a class="ui mini inverted red basic button" role="button" href="https://github.com/mamboer/vr" title="github@mamboer/vr" target="_blank"><i class="fa fa-github"></i>&nbsp;v1.0.0</a>
-                </div>
-            </div>
-        </form>
+        </div>
 
     </div>
 
     <div id="ribbon-wrapper" class="ribbon-wrap">
         <a id="ribbon" rel="bookmark" class="ribbon noicon" href="javascript:document.location='http://faso.me/vr/?url=' + document.location.href;" class="grab" title="Drag me to bookmarks">
-            <div class="content museo-slab" title="Drag to bookmarks"><span class="ui hidden label">Viewport Resizer For Testing Responsive Layouts</span></div>
-            <div class="inset"></div>
-            <div class="container">
-                <div class="base"></div>
-                <div class="end"></div>
+            <div class="ribbon-cont" title="Drag me to your bookmarks"><span class="hidden">Viewport Resizer For Testing Responsive Layouts</span></div>
+            <div class="ribbon-inset"></div>
+            <div class="ribbon-container">
+                <div class="ribbon-base"></div>
+                <div class="ribbon-end"></div>
             </div>
         </a>
     </div>
@@ -73,42 +68,46 @@
     <div id="vrPage" class="vr-page">
 
         <div id="address-bar" class="address-bar">
-            <div class="square box charcoal relative" style="z-index:1;">
-                <a href="./" class="absolute top left black gapped" style="border:none;padding:0;background:none;line-height:1.2;text-decoration:none;"><i class="icon-home icon-2x"></i></a>
-                <button data-toggle="#address-bar" class="absolute top right black gapped" style="border:none;padding:0;background:none;line-height:1.2;"><i class="icon-remove-sign icon-2x"></i></button>
-                <form action="./" method="get">
-                <div class="small-container">
-                    <div class="triple-pad-right triple-pad-left">
-                        <div class="flex-wrapper">
-                            <div class="pad-right" style="line-height:1.2;">
-                                <label for="url1" class="zero"><i class="icon-globe icon-2x"></i></label>
-                            </div>
-                            <div class="flex-box">
-                                <input class="ipt-url" id="url1" name="url" type="text" placeholder="http://www.example.com" value="" />
-                            </div>
-                            <div class="pad-left no-pad-left-mobile">
-                                <button type="submit" class="black" style="line-height:1.2;padding:0;border:0;background:none;"><i class="icon-circle-arrow-right icon-2x"></i></button>
+            <div class="flex-wrapper address-bar-bd">
+                <div class="vc">
+                    <a href="./" class="vc-item pad-left lnk-home"><i class="fa fa-home font-2x"></i></a>
+                </div>
+                <div class="flex-box small-container">
+                    <form action="./" method="get">
+                        <div class="triple-pad-right triple-pad-left">
+                            <div class="flex-wrapper ipt-box">
+                                <div class="pad-right ipt-box-licon vc">
+                                    <label for="url1" class="vc-item"><i class="fa fa-globe font-2x"></i></label>
+                                </div>
+                                <div class="flex-box ipt-box-bd">
+                                    <input class="ipt-url" id="url1" name="url" required type="text" placeholder="http://www.faso.me/vr" value="" />
+                                </div>
+                                <div class="pad-left ipt-box-ricon vc">
+                                    <button type="submit" class="vc-item icon-wrap"><i class="fa fa-arrow-circle-right font-2x"></i></button>
+                                </div>
                             </div>
                         </div>
-                    </div>
+                    </form>
                 </div>
-                </form>
+                <div class="vc">
+                    <button data-toggle="#address-bar" class="vc-item icon-wrap pad-right lnk-remove"><i class="fa fa-times-circle-o font-2x"></i></button>
+                </div>
             </div>
         </div>
 
         <div id="vr" class="vr bounceInDown animated">
             <ul class="button-group vr-devices">
-                <li><button class="charcoal" title="Enter URL" data-toggle="#address-bar"><i class="icon-terminal"></i></button></li>
-                <li><button class="charcoal refresh" title="Refresh Page"><i class="icon-refresh"></i></button></li>
-                <li><button class="charcoal desktop-only" title="Fullscreen" data-device="fullscreen" data-viewport-width="100%" data-viewport-height="100%" data-user-agent=""><i class="icon-fullscreen"></i></button></li>
-                <li><button class="charcoal desktop-only" title="Desktop" data-device="desktop" data-viewport-width="1920px" data-viewport-height="1080px" data-user-agent=""><i class="icon-desktop"></i></button></li>
-                <li><button class="charcoal desktop-only" title="13 &#39; MacBook Pro" data-device="macbook" data-viewport-width="1280px" data-viewport-height="800px" data-user-agent=""><i class="icon-laptop"></i></button></li>
-                <li><button class="charcoal hide-on-small-tablet hide-on-mobile" data-device="ipad" title="iPad" data-rotate="true" data-viewport-width="768px" data-viewport-height="1024px" data-user-agent="Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5376e Safari/8536.25"><i class="icon-tablet"></i></button></li>
-                <li><button class="charcoal hide-on-mobile" title="Android Tablet" data-device="tablet" data-rotate="true" data-viewport-width="720px" data-viewport-height="1280px" data-user-agent="Mozilla/5.0 (Linux; U; Android 4.0.2; en-us; Galaxy Nexus Build/ICL53F) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30"><i class="android icon-tablet"></i></button></li>
-                <li><button class="charcoal" title="Android Phone" data-rotate="true" data-device="android" data-viewport-width="480px" data-viewport-height="720px" data-user-agent="Mozilla/5.0 (Linux; U; Android 2.3.6; en-us; Nexus S Build/GRK39F) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1"><i class="android icon-mobile-phone"></i></button></li>
-                <li><button class="charcoal" title="iPhone" data-rotate="true" data-device="iphone" data-viewport-width="320px" data-viewport-height="640px" data-user-agent="Mozilla/5.0 (iPhone; CPU iPhone OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5376e Safari/8536.25"><i class="icon-mobile-phone"></i></button></li>
-                <li><button id="btnToggleRotate" class="charcoal rotate" data-rotate="true" title="Toggle Landscape/Portrait"><i class="icon-rotate-left"></i></button></li>
-                <li><a id="btnVRClose" class="close charcoal" href="./"><i class="icon-remove"></i></a></li>
+                <li><button class="vr-device" title="Enter URL" data-toggle="#address-bar"><i class="fa fa-terminal"></i></button></li>
+                <li><button class="vr-device refresh" title="Refresh Page"><i class="fa fa-refresh"></i></button></li>
+                <li><button class="vr-device desktop-only" title="Fullscreen" data-device="fullscreen" data-viewport-width="100%" data-viewport-height="100%" data-user-agent=""><i class="fa fa-arrows-alt"></i></button></li>
+                <li><button class="vr-device desktop-only" title="Desktop" data-device="desktop" data-viewport-width="1920px" data-viewport-height="1080px" data-user-agent=""><i class="fa fa-desktop"></i></button></li>
+                <li><button class="vr-device desktop-only" title="13 &#39; MacBook Pro" data-device="macbook" data-viewport-width="1280px" data-viewport-height="800px" data-user-agent=""><i class="fa fa-laptop"></i></button></li>
+                <li><button class="vr-device hide-on-small-tablet hide-on-mobile" data-device="ipad" title="iPad" data-rotate="true" data-viewport-width="768px" data-viewport-height="1024px" data-user-agent="Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5376e Safari/8536.25"><i class="fa fa-tablet"></i></button></li>
+                <li><button class="vr-device hide-on-mobile" title="Android Tablet" data-device="tablet" data-rotate="true" data-viewport-width="720px" data-viewport-height="1280px" data-user-agent="Mozilla/5.0 (Linux; U; Android 4.0.2; en-us; Galaxy Nexus Build/ICL53F) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30"><i class="android fa fa-tablet"></i></button></li>
+                <li><button class="vr-device" title="Android Phone" data-rotate="true" data-device="android" data-viewport-width="480px" data-viewport-height="720px" data-user-agent="Mozilla/5.0 (Linux; U; Android 2.3.6; en-us; Nexus S Build/GRK39F) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1"><i class="android fa fa-mobile"></i></button></li>
+                <li><button class="vr-device" title="iPhone" data-rotate="true" data-device="iphone" data-viewport-width="320px" data-viewport-height="640px" data-user-agent="Mozilla/5.0 (iPhone; CPU iPhone OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5376e Safari/8536.25"><i class="fa fa-mobile"></i></button></li>
+                <li><button id="btnToggleRotate" class="vr-device rotate" data-rotate="true" title="Toggle Landscape/Portrait"><i class="fa fa-undo"></i></button></li>
+                <li><a id="btnVRClose" class="close vr-device" href="./"><i class="fa fa-times"></i></a></li>
             </ul>
         </div>
 
@@ -118,6 +117,9 @@
 
     </div>
 
+    <div class="vrloader vc hidden" id="vrLoader">
+        <img src="img/loading.gif" alt="loading"/>
+    </div>
     <script src="js/vr.js"></script>
     <!-- baidu analytics -->
     <script>
