@@ -65,7 +65,7 @@ gulp.task('css',['less'],function(){
 
     return gulp.src('src/css/*.css',{base:'src'})
         .pipe(csso())
-        .pipe(gulp.dest('dist'))
+        .pipe(gulp.dest('site'))
         .pipe(livereload());  
 
 });
@@ -73,7 +73,7 @@ gulp.task('css',['less'],function(){
 gulp.task('watch',['express'], function() {
     livereload.listen();
     gulp.watch('src/less/**/*.less', ['reload']);  // Watch all the .less files, then run the less task
-    gulp.watch(['src/js/*.js','index.html'],['reload']);  // livereload not works for js file, so we have to reload the whole page
+    gulp.watch(['src/js/*.js','src/index.html'],['reload']);  // livereload not works for js file, so we have to reload the whole page
 });
 
 gulp.task('reload',['js','css','copy'],function(){
@@ -86,14 +86,16 @@ gulp.task('reload',['js','css','copy'],function(){
 
 gulp.task('js',['lint','swig'],function(){
 
-    return gulp.src(['./src/libs/modernizr.js', './src/libs/jquery.js', '../src/libs/jquery.cookie.js'])
+    return gulp.src(['./src/libs/modernizr.js', './src/libs/jquery.js', './src/libs/jquery.cookie.js'])
         .pipe(concat('libs.js'))
-        .pipe(gulp.dest('./src/libs/')
+        .pipe(gulp.dest('./src/libs/'))
         .pipe(gulp.dest('./site/js/'))
+        .pipe(gulp.dest('./dist/js/'))
         .pipe(uglify({preserveComments:'some'}))
         .pipe(rename( 'libs.min.js' ))
-        .pipe(gulp.dest('./src/libs/')
+        .pipe(gulp.dest('./src/libs/'))
         .pipe(gulp.dest('./site/js/'));
+        .pipe(gulp.dest('./dist/js/')
 });
 
 gulp.task('swig',function(){
@@ -104,31 +106,33 @@ gulp.task('swig',function(){
     
     gulp.src(['./src/*.html'])
         .pipe(swig(swigOpts))
-        .pipe(gulp.dest('site'));
+        .pipe(gulp.dest('site')),
+        .pipe(gulp.dest('dist'));
 
     return gulp.src(cfg.js.src)
         .pipe(swig(swigOpts))
         .pipe(rename(cfg.js.name))
         .pipe(gulp.dest('site/js'))
+        .pipe(gulp.dest('dist/js'))
         .pipe(uglify({preserveComments:'some'}))
         .pipe(rename( cfg.js.minName ))
-        .pipe(gulp.dest('site/js'));
+        .pipe(gulp.dest('site/js')),
+        .pipe(gulp.dest('dist/js'));
     
 });
 
 gulp.task('copy',function(){
-    var siteFiles = ['package.json','src/libs/semantic-ui/**'];
-    gulp.src(siteFiles,{base:'.'})
-        .pipe(gulp.dest('site/libs/semantic-ui'));
-
-    gulp.src(['src/css/**'],{base:'src'})
-        .pipe(gulp.dest('site/css'));
+    gulp.src(['package.json'],{base:'.'})
+        .pipe(gulp.dest('site')),
+        .pipe(gulp.dest('dist'));
    
-    gulp.src(['src/fonts/**'],{base:'src'})
-        .pipe(gulp.dest('site/fonts'));
-
-    gulp.src(['src/img/**'],{base:'src'})
-        .pipe(gulp.dest('site/img'));
+    gulp.src([
+        'src/fonts/**',
+        'src/img/**',
+        'src/libs/semantic-ui/**'
+    ],{base:'src'})
+        .pipe(gulp.dest('site')),
+        .pipe(gulp.dest('dist'));
 
 });
 

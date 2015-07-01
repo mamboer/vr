@@ -1,0 +1,373 @@
+@import "font-awesome/font-awesome";
+@import "includes/fonts.less";
+@import (less) "includes/animate.css";
+
+.container {margin:0 2rem;}
+.header.segment {  padding-top: 70px;padding-bottom: 30px;}
+.flex-wrapper {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+}
+.pad-right {padding-right:10px;}
+.pad-left {padding-left:10px;}
+.icon-3x {font-size:3em;}
+.icon-4x {font-size:4em;}
+
+.flex-box {
+    width: percent(1);
+    -webkit-box-flex: 1;
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+}
+//vertical center via flex
+.vc {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -webkit-align-items: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    &-item {
+        -webkit-box-flex: 1;
+        flex: 1;
+        &--fixed {
+            -webkit-box-flex: 0;
+            flex: none;
+        }
+    }
+}
+.ipt-box {
+    &-ricon{
+        button {
+            padding: 0;
+            border: 0;
+            background: none;
+        }
+    }
+}
+
+[data-icon]:before {
+    font-family: 'flexy';
+    content: attr(data-icon);
+    speak: none;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-strong-arm-right, .icon-strong-arm-left {
+    font-family: 'flexy';
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+}
+.icon-strong-arm-right:before {
+    content: "\e000";
+}
+.icon-strong-arm-left:before {
+    content: "\e001";
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    background: #333 url('../img/black_linen_v2.png') center repeat;
+    overflow: hidden;
+    color: #fff;
+}
+
+.vr-page { display: none; height: 100%; }
+
+a, a:visited {
+    color: inherit;
+}
+
+a:not(.noicon)[href*="github.com"]:before {
+    color: inherit;
+}
+
+.small-container {
+    max-width: 52em;
+    margin: 0 auto;
+}
+
+.vrframe {
+    z-index:1;
+    width: 100%;
+    max-width: 100%;
+    height: 100%;
+    max-height: 100%;
+    margin: 0 auto;
+    background: #fff;
+    box-shadow: 0 0 50px #000;
+    transition: max-width 0.35s ease-out, max-height 0.35s ease-out;
+    &-wrap {
+        position: relative;
+        height:100%;
+        &:before, &:after {
+            font-family: 'flexy';
+            speak: none;
+            font-style: normal;
+            font-weight: normal;
+            font-variant: normal;
+            text-transform: none;
+            line-height: 1;
+            -webkit-font-smoothing: antialiased;
+            font-size: 8em;
+            position: absolute;
+            top: 1em;
+        }
+
+        &:before {
+          content: "\e001";
+          margin-left: -0.725em;
+        }
+
+        &:after {
+          content: "\e000";
+          margin-right: -0.725em;
+        }
+    }
+}
+
+.vr {
+    text-align: center;
+    line-height: 1;
+    &-devices {
+        font-size: 13px;
+        display: inline-block;
+        margin: -0.2em auto 0.2em;
+        filter: drop-shadow(0 1px 5px rgba(0,0,0,.25));
+        transform: translateZ(0);
+    }
+}
+
+.logo {
+    padding:1em 0 0;
+    line-height: 1.5;
+    text-transform: uppercase;
+    font-weight: bold;
+    font-family: 'Gorditas', Verdana, 'museo-slab', Helvetica, Arial, sans-serif;
+    i {
+        position: relative;
+        top: -0.15em;
+    }
+}
+
+button.rotate i:before, button[data-rotate] i:before {
+    transition: all 0.15s linear;
+}
+
+.landscape i:before {
+    transform: rotate(-90deg);
+}
+
+.ipt-url {
+    font-family: "source-sans-pro", Helvetica, "Trebuchet MS", Arial, sans-serif;
+}
+
+[data-max="150"] {
+    font-size: 150px;
+}
+
+[data-max="95"] {
+    font-size: 95px;
+}
+
+[data-max="30"] {
+    font-size: 30px;
+}
+
+@media (max-width: 480px) {
+    [data-min="60"] {
+        font-size: 60px;
+    }
+    [data-min="52"] {
+        font-size: 52px;
+    }
+    [data-min="20"] {
+        font-size: 20px;
+    }
+}
+
+input[type="text"] {
+    transition: background 500ms, border 500ms;
+    border: 1px solid #5a5a5a;
+}
+
+input[type="text"]:focus {
+    outline: 0;
+    border-color: #29b765;
+}
+
+a[role="button"] {
+    font-family: "museo-slab", "source-sans-pro", Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+}
+
+.lnk-bookmark {
+    text-decoration: none;
+    &:after {
+      content: attr(title);
+      font-weight: bold;
+      font-family: "museo-slab", "source-sans-pro", Helvetica, Arial, sans-serif;
+    }
+}
+
+.address-bar {
+    position: relative;
+    z-index: 3;
+}
+
+.ribbon {
+    display: block;
+    width: 100px;
+    height: 130px;
+    margin: -105px auto 0;
+    position: relative;
+    overflow: hidden;
+    transition: margin 500ms;
+    &-wrap {
+        position: fixed;
+        top: 0;
+        right: 10px;
+        z-index: 2;
+    }
+    &:hover, &:focus {
+        margin-top: 0;
+    }
+
+    .inset {
+        width: 200px;
+        height: 55px;
+        position: absolute;
+        top: -50px;
+        left: -10px;
+        z-index: 5;
+        border-radius: 50%;
+        background: rgba(0,0,0,0.3);
+        box-shadow: 0px 5px 10px 0px rgba(0,0,0,0.3);
+    }
+
+    .content {
+        position: absolute;
+        z-index: 3;
+        top: 0;
+        left: 0;
+        right: 0;
+        padding: 25px 10px;
+        font-size: 13px;
+        color: #fff;
+        &:after {
+          content: attr(title);
+        }
+    }
+
+    .container {
+        position: relative;
+        width: 100px;
+        height: 150px;
+        overflow: hidden;
+        margin: 0 auto;
+    }
+
+    .base {
+        height: 100px;
+        width: 100px;
+        background-color: #e74c3c;
+        border-color: #e43725;
+        background: -moz-linear-gradient(top,  #e74c3c 0%, #e43725 100%);
+        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#e74c3c), color-stop(100%,#e43725));
+        background: -webkit-linear-gradient(top,  #e74c3c 0%,#e43725 100%);
+        background: -o-linear-gradient(top,  #e74c3c 0%,#e43725 100%);
+        background: -ms-linear-gradient(top,  #e74c3c 0%,#e43725 100%);
+        background: linear-gradient(top,  #e74c3c 0%,#e43725 100%);
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e74c3c', endColorstr='#e43725',GradientType=0 );
+        position: relative;
+        z-index: 2;
+        &:after {
+            content: "";
+            position: absolute;
+            top: 0;
+            width: 86px;
+            left: 6px;
+            height: 103px;
+            border-left: 1px dashed #631a15;
+            border-right: 1px dashed #631a15;
+        }
+
+        &:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            width: 86px;
+            left: 7px;
+            height: 103px;
+            border-left: 1px dashed #da5050;
+            border-right: 1px dashed #da5050;
+        }
+    }
+
+    .end {
+        width: 0;
+        height: 0;
+        border-top: 30px solid #e43725;
+        border-left: 50px solid transparent;
+        border-right: 50px solid transparent;
+        position: absolute;
+        bottom: 20px;
+        left: 0;
+        right: 0;
+        z-index: 1;
+    }
+}
+
+.grab {
+    cursor: url("../img/openhand.cur") 8 8, move;
+    cursor: -webkit-grab;
+    cursor: -moz-grab;
+}
+span.placeholder{
+    position:absolute;
+    font-size:75%;
+    color:#999;
+    font-family:sans-serif;
+    padding:4px 3px;
+    z-index:1;
+    cursor:text
+}
+span.placeholder-hide-except-screenreader{
+    clip:rect(1px 1px 1px 1px);
+    clip:rect(1px,1px,1px,1px);
+    padding:0!important;
+    border:0!important;
+    height:1px!important;
+    width:1px!important;
+    overflow:hidden
+}
+span.placeholder-hide{
+    display:none
+}
+label.visuallyhidden-with-placeholder{
+    height:auto!important;
+    overflow:visible!important;
+    position:absolute!important;
+    left:-999em
+}

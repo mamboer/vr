@@ -1,7 +1,7 @@
 {
   "name": "vr",
   "version": "1.0.0",
-  "title": "Viewport Resizer",
+  "title": "Viewport Resizer For Testing Responsive Layouts",
   "description": "VR(Viewport Resizer) Is A Front-end Device Emulator For Simulating Renderring HTML Pages In Kinds of Mobile Devices.",
   "main": ["dist/js/vr.js","dist/css/vr.css"],
   "baiduTJCode":"3650191bfe834b10e62ed8843451d33e",
