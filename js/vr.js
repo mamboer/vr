@@ -9,10 +9,12 @@ var $win = $(W),
 var VR = {
     ensureValidProtocol: function($el, evt) {
         var protocol = $el.val().substring(0,4),
+        $parent = $el.parent(),
         regex = new RegExp(":\/\/");
+        $parent.removeClass('error');
         if(regex.test($el.val()) && protocol != 'http') {
-            alert("Invalid protocol detected. Unfortunately, only HTTP and HTTPS protocols will work  =(");
             $el.focus().select();
+            $parent.addClass('error');
             evt.stopPropagation();
             evt.preventDefault();
         }
@@ -43,27 +45,83 @@ var VR = {
         delete this.init;
         //setup bookmarks   
         $('[rel="bookmark"]').attr('href', "javascript:document.location='"+document.location+"?url=' + document.location.href;");
+        this.$frame = $('#vrFrame');
+        initEvts();
+        this.toggleSiteLoader(true);
+        this.parseUrl();
+        this.parseAddrBar();
+        restoreFromCookie(this.getDeviceFromUrl());
+    },
+    parseUrl:function(reload){
         // parse url parameter
-        var urlParam = this.url = this.getParameterByName('url');
+        var urlParam = this.url = this.getParameterByName('url'),
+            vrt = new Date().getTime();
         if(urlParam.length > 0) {
             if(urlParam.substr(0,4) != 'http') {
                 urlParam = 'http://' + urlParam;
             }
             this.url = urlParam;
             $('[name="url"]').val(this.url);
-            $('#vrFrame').attr('src',this.url);
-            $('#indexPage').hide();
-            $('#vrpage').show();
+
+            if(reload === true){
+                if(urlParam.indexOf('?')>0){
+                    urlParam = urlParam + '&vrt='+ vrt;
+                }else{
+                    urlParam = urlParam + '?vrt='+ vrt;
+                }
+            }
+
+            this.showLoader();
+            this.$frame.attr('src', urlParam);
+            $('#vrPage').removeClass('hidden');
+        } else {
+            $('#indexPage').removeClass('hidden');
+            $('#ribbon-wrapper').removeClass('hidden');
         }
-        initEvts();
-        restoreFromCookie();
+    },
+    parseAddrBar: function(){
+        var addrBar = this.getParameterByName('addrbar'),
+            $toolbar = $('#toolbar');
+        addrBar = addrBar === '1' ? '1':'0';
+        document.getElementById('iptAddrBar').value = addrBar;
+        if(addrBar === '1'){
+            this.toggleAddressBar();
+        }        
+    },
+    getDeviceFromUrl: function(){
+        var device = this.getParameterByName('device');
+        document.getElementById('iptDevice').value = device;
+        return device;
+    },
+    showLoader:function(){
+        this.$frame.addClass('invisible'); 
+        this.toggleSiteLoader(false);
+    },
+    hideLoader:function(){
+        this.$frame.removeClass('invisible');
+        this.toggleSiteLoader(true);
+    },
+    toggleAddressBar: function(){
+        $('#toolbar').toggleClass('open');
+        $('[data-addrtoggle]').toggleClass('open');
+    },
+    toggleSiteLoader:function(hide){
+        if(hide === true){
+            $('#siteLoader').addClass('hidden').removeClass('animate-rotate360');
+        }else{
+            $('#siteLoader').removeClass('hidden').addClass('animate-rotate360');
+        }
     }
 
 };
 
-var restoreFromCookie = function(){ 
+var restoreFromCookie = function(userDevice){ 
     var device = $.cookie('vr-device'),
         orient = $.cookie('vr-orientation');
+
+    device = userDevice === '' ? device : userDevice;
+
+    device = device || 'iphone5'; 
 
     if( device ) {
         $('[data-device="'+device+'"]').trigger('click');
@@ -77,7 +135,7 @@ var restoreFromCookie = function(){
 var initEvts = function() {
 
     var $viewports = $('button[data-viewport-width]'),
-        $frame = $('#vrFrame'),
+        $frame =VR.$frame,
         $rotateViewports = $('button[data-rotate=true]'),
         $vr = $('#vr');
 
@@ -91,7 +149,7 @@ var initEvts = function() {
     closeResizer = function() {
         var newWidth = $win.width(),
             newHeight = $win.height();
-        $viewports.removeClass('asphalt active').addClass('charcoal');
+        $viewports.removeClass('active');
         $frame.css({
             'max-width': newWidth,
             'max-height': newHeight
@@ -101,14 +159,18 @@ var initEvts = function() {
         });
     };
 
+    $frame.on('load',function(e){
+        VR.hideLoader();
+    });
+
     $body.on('click', 'button[data-viewport-width]', function(e) {
         var newWidth = this.getAttribute('data-viewport-width'),
             newHeight = this.getAttribute('data-viewport-height'),
             $this = $(this),
             device = this.getAttribute('data-device');
 
-        $viewports.removeClass('asphalt active').addClass('charcoal');
-        $this.addClass('asphalt active').removeClass('charcoal');
+        $viewports.removeClass('active');
+        $this.addClass('active');
         $.cookie('vr-device', device);
         $frame.css({
             'max-width': newWidth,
@@ -134,17 +196,17 @@ var initEvts = function() {
             }
         });
     }).on('click', 'button.refresh', function(e) {
-        $(this).find('i[class*="icon-"]').addClass('icon-rotate-360');
-        $frame[0].contentWindow.location.reload(true);
+        VR.parseUrl(true);
     }).on('click', '#closeResizer', function(e) {
         closeResizer();
-    }).on('click', '[data-toggle]', function(e) {
-        var $el = $(this.getAttribute('data-toggle'));
-        $el.slideToggle(150, function() {
-            if($el.is(':visible')) {
-                $el.find('[name="url"]').focus().select();
-            }
-        });
+    }).on('click', '[data-addrtoggle]', function(e) {
+        var $this = $(this),
+            $el = $(this.getAttribute('data-toggle'));
+        VR.toggleAddressBar();
+        if($el.hasClass('open')) {
+            $el.find('[name="url"]').focus().select();
+        }
+        
     }).on('keyup', 'input', function(e) {
         if(e.keyCode == 27) {
             $('[data-toggle]').first().trigger('click');
@@ -201,7 +263,11 @@ var initEvts = function() {
 
 
     $('form').on('submit', function(e) {
-        if($(this).find('[name="url"]').val() === '') {
+        var $url = $(this).find(['name="url"']),
+            $urlParent = $url.parent();
+        $urlParent.removeClass('error');
+        if($url.val() === '') {
+            $urlParent.addClass('error');
             e.preventDefault();
             e.stopPropagation();
             return false;
