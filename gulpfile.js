@@ -135,8 +135,7 @@ gulp.task('copy',function(){
    
     gulp.src([
         'src/fonts/**',
-        'src/img/**',
-        'src/libs/semantic-ui/**'
+        'src/img/**'
     ],{base:'src'})
         .pipe(gulp.dest('site'))
         .pipe(gulp.dest('dist'));
