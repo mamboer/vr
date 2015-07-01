@@ -66,6 +66,7 @@ gulp.task('css',['less'],function(){
     return gulp.src('src/css/*.css',{base:'src'})
         .pipe(csso())
         .pipe(gulp.dest('site'))
+        .pipe(gulp.dest('dist'))
         .pipe(livereload());  
 
 });
@@ -94,8 +95,8 @@ gulp.task('js',['lint','swig'],function(){
         .pipe(uglify({preserveComments:'some'}))
         .pipe(rename( 'libs.min.js' ))
         .pipe(gulp.dest('./src/libs/'))
-        .pipe(gulp.dest('./site/js/'));
-        .pipe(gulp.dest('./dist/js/')
+        .pipe(gulp.dest('./site/js/'))
+        .pipe(gulp.dest('./dist/js/'));
 });
 
 gulp.task('swig',function(){
@@ -106,7 +107,7 @@ gulp.task('swig',function(){
     
     gulp.src(['./src/*.html'])
         .pipe(swig(swigOpts))
-        .pipe(gulp.dest('site')),
+        .pipe(gulp.dest('site'))
         .pipe(gulp.dest('dist'));
 
     return gulp.src(cfg.js.src)
@@ -116,14 +117,14 @@ gulp.task('swig',function(){
         .pipe(gulp.dest('dist/js'))
         .pipe(uglify({preserveComments:'some'}))
         .pipe(rename( cfg.js.minName ))
-        .pipe(gulp.dest('site/js')),
+        .pipe(gulp.dest('site/js'))
         .pipe(gulp.dest('dist/js'));
     
 });
 
 gulp.task('copy',function(){
     gulp.src(['package.json'],{base:'.'})
-        .pipe(gulp.dest('site')),
+        .pipe(gulp.dest('site'))
         .pipe(gulp.dest('dist'));
    
     gulp.src([
@@ -131,7 +132,7 @@ gulp.task('copy',function(){
         'src/img/**',
         'src/libs/semantic-ui/**'
     ],{base:'src'})
-        .pipe(gulp.dest('site')),
+        .pipe(gulp.dest('site'))
         .pipe(gulp.dest('dist'));
 
 });

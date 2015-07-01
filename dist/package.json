@@ -1,0 +1,49 @@
+{
+  "name": "vr",
+  "version": "1.0.0",
+  "title": "Viewport Resizer For Testing Responsive Layouts",
+  "description": "VR(Viewport Resizer) Is A Front-end Device Emulator For Simulating Renderring HTML Pages In Kinds of Mobile Devices.",
+  "main": ["dist/js/vr.js","dist/css/vr.css"],
+  "baiduTJCode":"3650191bfe834b10e62ed8843451d33e",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mamboer/vr.git"
+  },
+  "keywords": [
+    "Viewport",
+    "Viewport Resize",
+    "Emulator",
+    "Simulator",
+    "Mobile Emulator",
+    "Mobile Simulator"
+  ],
+  "author": "Levin Van",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mamboer/vr/issues"
+  },
+  "homepage": "https://github.com/mamboer/vr",
+  "meta":{
+    "js":"dist/js/vr.min.js",
+    "css":"dist/css/vr.css"
+  },
+  "devDependencies": {
+    "express": "^4.12.3",
+    "gulp": "^3.8.11",
+    "gulp-autoprefixer": "^2.1.0",
+    "gulp-concat": "^2.5.2",
+    "gulp-csso": "^1.0.0",
+    "gulp-jshint": "^1.9.4",
+    "gulp-less": "^3.0.2",
+    "gulp-livereload": "^3.8.0",
+    "gulp-plumber": "^1.0.0",
+    "gulp-rename": "^1.2.0",
+    "gulp-swig": "^0.7.4",
+    "gulp-uglify": "^1.1.0",
+    "gulp-sourcemaps": "^1.5.1",
+    "jshint-stylish": "^1.0.1"
+  }
+}
