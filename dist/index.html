@@ -8,10 +8,21 @@
     <meta name="description" content="VR(Viewport Resizer) Is A Front-end Device Emulator For Simulating Renderring HTML Pages In Kinds of Mobile Devices."/>
     <meta name="author" content="Levin Van"/>
     <title>Viewport Resizer For Testing Responsive Layouts</title>
-    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="images/apple-touch-icon-144x144-precomposed.png"/>
-    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/apple-touch-icon-114x114-precomposed.png"/>
-    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/apple-touch-icon-72x72-precomposed.png"/>
-    <link rel="apple-touch-icon-precomposed" href="images/apple-touch-icon-precomposed.png"/>
+    <!--web app metas-->
+    <meta name="apple-touch-fullscreen" content="yes" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="apple-mobile-web-app-status-bar-style" content="black"/>  
+    <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon" />
+    <link rel="apple-touch-icon" href="img/apple-touch-icon.png" />
+    <link rel="apple-touch-icon" sizes="57x57" href="img/apple-touch-icon-57x57.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="img/apple-touch-icon-72x72.png" />
+    <link rel="apple-touch-icon" sizes="76x76" href="img/apple-touch-icon-76x76.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="img/apple-touch-icon-114x114.png" />
+    <link rel="apple-touch-icon" sizes="120x120" href="img/apple-touch-icon-120x120.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="img/apple-touch-icon-144x144.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="img/apple-touch-icon-152x152.png" />   
+ 
     <link type="text/css" rel="stylesheet" href="css/vr.css"/>
     <!--Libs-->
     <script src="js/libs.js"></script>
@@ -33,7 +44,7 @@
                         <label for="url2" class="vc-item"><i class="fa fa-globe font-3x"></i></label>
                     </div>
                     <div class="flex-box ipt-box-bd" title="Only support HTTP or HTTPS protocals">
-                        <input type="text" class="ipt-url font-big" autofocus tabindex="1" id="url2" name="url" placeholder="http://www.faso.me" required/>
+                        <input type="text" class="font-big ipt-url" autofocus tabindex="1" id="url2" name="url" placeholder="http://github.com/mamboer/vr" required/>
                     </div>
                     <div class="pad-left ipt-box-ricon vc">
                         <button type="submit" class="vc-item icon-wrap" tabindex="2"><i class="fa fa-arrow-circle-right font-3x"></i></button>
@@ -48,7 +59,7 @@
         <div class="container">
             
             <div class="center-text">
-                <a class="lnk-github" role="button" href="https://github.com/mamboer/vr" title="github@mamboer/vr" target="_blank"><i class="fa fa-github"></i>&nbsp;v1.0.0</a>
+                <a class="lnk-github" role="button" href="https://github.com/mamboer/vr" title="github@mamboer/vr" target="_blank"><i class="fa fa-github"></i>&nbsp;v1.0.1</a>
             </div>
         </div>
 
@@ -65,7 +76,7 @@
         </a>
     </div>
 
-    <div id="vrPage" class="vr-page hidden">
+    <div id="vrPage" class="vr-page vf hidden">
         <div class="toolbar" id="toolbar">
             <div id="address-bar" class="address-bar">
                 <div class="flex-wrapper address-bar-bd">
@@ -79,7 +90,7 @@
                                         <label for="url1" class="vc-item"><i class="fa fa-globe font-2x"></i></label>
                                     </div>
                                     <div class="flex-box ipt-box-bd">
-                                        <input class="ipt-url" id="url1" name="url" required type="text" placeholder="http://www.faso.me/vr" value="" />
+                                        <input class="ipt-url" id="url1" name="url" required type="text" placeholder="http://github.com/mamboer/vr" value="" />
                                     </div>
                                     <div class="pad-right pad-left ipt-box-ricon vc">
                                         <button type="submit" class="vc-item icon-wrap"><i class="fa fa-arrow-circle-right font-2x"></i></button>
@@ -122,7 +133,7 @@
                 </ul>
             </div>
         </div>
-        <div id="vrFrameWrapper" class="vrframe-wrap">
+        <div id="vrFrameWrapper" class="vf-item vrframe-wrap">
             <iframe id="vrFrame" class="vrframe invisible" src="about:blank" frameborder="0"></iframe>
         </div>
 

@@ -1,6 +1,6 @@
 {
   "name": "vr",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "homepage": "https://github.com/mamboer/vr",
   "authors": ["Levin Van"],
   "description": "VR(Viewport Resizer) Is A Front-end Device Emulator For Simulating Renderring HTML Pages In Kinds of Mobile Devices.",
