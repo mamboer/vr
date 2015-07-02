@@ -20,7 +20,6 @@
     "test",
     "tests",
     "*.json",
-    "site",
-    "*.html"
+    "site"
   ]
 }
