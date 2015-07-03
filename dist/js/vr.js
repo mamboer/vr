@@ -46,17 +46,20 @@ var VR = {
         //setup bookmarks   
         $('[rel="bookmark"]').attr('href', "javascript:document.location='"+document.location+"?url=' + document.location.href;");
         this.$frame = $('#vrFrame');
+        this.device = this.getDeviceFromCookie(this.getDeviceFromUrl());
         this.initUA();
         initEvts();
         this.toggleSiteLoader(true);
         this.parseUrl();
         this.parseAddrBar();
-        restoreFromCookie(this.getDeviceFromUrl());
+        this.restore(this.device);
     },
     parseUrl:function(reload){
         // parse url parameter
         var urlParam = this.url = this.getParameterByName('url'),
-            vrt = new Date().getTime();
+            vrt = new Date().getTime(),
+            ua = this.device.ua;
+
         if(urlParam.length > 0) {
             if(urlParam.substr(0,4) != 'http') {
                 urlParam = 'http://' + urlParam;
@@ -73,6 +76,9 @@ var VR = {
             }
 
             this.showLoader();
+            $('#btnVRClose').attr('href', urlParam);
+            this.setUA(W, ua);
+            this.setUA(this.$frame[0].id, ua);
             this.$frame.attr('src', urlParam);
             $('#vrPage').removeClass('hidden');
         } else {
@@ -93,6 +99,26 @@ var VR = {
         var device = this.getParameterByName('device');
         document.getElementById('iptDevice').value = device;
         return device;
+    },
+    getDeviceFromCookie:function(userDevice){
+        var device = $.cookie('vr-device'),
+            orient = $.cookie('vr-orientation');
+
+        device = userDevice === '' ? device : userDevice;
+
+        device = device || 'iphone5'; 
+
+        return ({
+            id:device,
+            orient:orient
+        });
+
+    },
+    restore:function(device){ 
+        $('[data-device="'+ device.id +'"]').trigger('click');
+        if( device.orient === 'landscape' ) {
+            $('#btnToggleRotate').trigger('click');
+        }   
     },
     showLoader:function(){
         this.$frame.addClass('invisible'); 
@@ -116,40 +142,37 @@ var VR = {
     initUA:function(){
         var ua = navigator.userAgent;
         $('.desktop-only').attr('data-user-agent', ua); 
+        this.device.ua = ua;
     },
     setUA:function(win, userAgent) {
+        
+        var sameHost = this.url.indexOf(location.host)>-1,
+            navig;
+        
         //iframe id
         if(typeof(win)==='string'){
             win = document.querySelector('#'+win).contentWindow;
         }
-        if (win.navigator.userAgent != userAgent) {
+        try{
+            navig = win.navigator;    
+        }catch(e){
+            console.log(e);
+            navig = null;
+        }
+        if (navig && navig.userAgent != userAgent) {
             var userAgentProp = { get: function () { return userAgent; } };
             try {
-                Object.defineProperty(win.navigator, 'userAgent', userAgentProp);
+                Object.defineProperty(navig, 'userAgent', userAgentProp);
             } catch (e) {
-                win.navigator = Object.create(navigator, {
+                win.navigator = Object.create(navig, {
                     userAgent: userAgentProp
                 });
             }
         }
+    },
+    refresh:function(){
+        this.parseUrl(true);    
     }
-};
-
-var restoreFromCookie = function(userDevice){ 
-    var device = $.cookie('vr-device'),
-        orient = $.cookie('vr-orientation');
-
-    device = userDevice === '' ? device : userDevice;
-
-    device = device || 'iphone5'; 
-
-    if( device ) {
-        $('[data-device="'+device+'"]').trigger('click');
-    }
-    if( orient === 'landscape' ) {
-        $('#btnToggleRotate').trigger('click');
-    }
-   
 };
 
 var initEvts = function() {
@@ -159,14 +182,7 @@ var initEvts = function() {
         $rotateViewports = $('button[data-rotate=true]'),
         $vr = $('#vr');
 
-    var forceClose = function() {
-        if($('#closeResizer').length>0) {
-            closeResizer();
-        }else{
-            document.location = document.getElementById('btnVRClose').getAttribute('href');
-        }
-    },
-    closeResizer = function() {
+    var closeResizer = function(href) {
         var newWidth = $win.width(),
             newHeight = $win.height();
         $viewports.removeClass('active');
@@ -175,12 +191,13 @@ var initEvts = function() {
             'max-height': newHeight
         });
         $vr.fadeOut(500, function() {
-            document.location = $frame[0].contentWindow.location.href;
+            document.location.href = href;
         });
     };
 
     $frame.on('load',function(e){
         VR.hideLoader();
+        W.postMessage(VR.device, '*');    
     });
 
     $body.on('click', 'button[data-viewport-width]', function(e) {
@@ -190,6 +207,9 @@ var initEvts = function() {
             device = this.getAttribute('data-device'),
             ua = this.getAttribute('data-user-agent');
 
+        VR.device.ua = ua;
+        VR.device.id = device;
+
         $viewports.removeClass('active');
         $this.addClass('active');
         $.cookie('vr-device', device);
@@ -197,11 +217,11 @@ var initEvts = function() {
             'max-width': newWidth,
             'max-height': newHeight
         });
+        VR.setUA(W, ua);
         VR.setUA($frame[0].id, ua);
-        console.log('ua', ua); 
         e.preventDefault();
         return false;
-    }).on('click', 'button.rotate', function(e) {
+    }).on('click', '.rotate', function(e) {
         $rotateViewports.each(function() {
             var $this = $(this).toggleClass('landscape'),
                 width = $this.attr('data-viewport-width'),
@@ -212,16 +232,19 @@ var initEvts = function() {
             if($this.hasClass('active')) {
                 $this.trigger('click');
                 if( $this.hasClass('landscape') ) {
-                  $.cookie('vr-orientation', 'landscape');
+                    $.cookie('vr-orientation', 'landscape');
+                    VR.device.orient = 'landscape';
                 }else{
-                  $.removeCookie('vr-orientation');
+                    VR.device.orient = 'portrait';
+                    $.removeCookie('vr-orientation');
                 }
             }
         });
-    }).on('click', 'button.refresh', function(e) {
-        VR.parseUrl(true);
-    }).on('click', '#closeResizer', function(e) {
-        closeResizer();
+    }).on('click', '.refresh', function(e) {
+        VR.refresh();
+    }).on('click', '.close', function(e) {
+        closeResizer(VR.url);
+        return false;
     }).on('click', '[data-addrtoggle]', function(e) {
         var $this = $(this),
             $el = $(this.getAttribute('data-toggle'));
@@ -279,7 +302,7 @@ var initEvts = function() {
             $('.rotate').trigger('click');
             break;
           case 88:
-            forceClose();
+            closeResizer(VR.url);
             break;
         }
     });
