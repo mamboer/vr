@@ -46,6 +46,7 @@ var VR = {
         //setup bookmarks   
         $('[rel="bookmark"]').attr('href', "javascript:document.location='"+document.location+"?url=' + document.location.href;");
         this.$frame = $('#vrFrame');
+        this.initUA();
         initEvts();
         this.toggleSiteLoader(true);
         this.parseUrl();
@@ -111,8 +112,27 @@ var VR = {
         }else{
             $('#siteLoader').removeClass('hidden').addClass('animate-rotate360');
         }
+    },
+    initUA:function(){
+        var ua = navigator.userAgent;
+        $('.desktop-only').attr('data-user-agent', ua); 
+    },
+    setUA:function(win, userAgent) {
+        //iframe id
+        if(typeof(win)==='string'){
+            win = document.querySelector('#'+win).contentWindow;
+        }
+        if (win.navigator.userAgent != userAgent) {
+            var userAgentProp = { get: function () { return userAgent; } };
+            try {
+                Object.defineProperty(win.navigator, 'userAgent', userAgentProp);
+            } catch (e) {
+                win.navigator = Object.create(navigator, {
+                    userAgent: userAgentProp
+                });
+            }
+        }
     }
-
 };
 
 var restoreFromCookie = function(userDevice){ 
@@ -167,7 +187,8 @@ var initEvts = function() {
         var newWidth = this.getAttribute('data-viewport-width'),
             newHeight = this.getAttribute('data-viewport-height'),
             $this = $(this),
-            device = this.getAttribute('data-device');
+            device = this.getAttribute('data-device'),
+            ua = this.getAttribute('data-user-agent');
 
         $viewports.removeClass('active');
         $this.addClass('active');
@@ -176,6 +197,8 @@ var initEvts = function() {
             'max-width': newWidth,
             'max-height': newHeight
         });
+        VR.setUA($frame[0].id, ua);
+        console.log('ua', ua); 
         e.preventDefault();
         return false;
     }).on('click', 'button.rotate', function(e) {
@@ -239,16 +262,16 @@ var initEvts = function() {
             $('[data-device="macbook"]').trigger('click');
             break;
           case 52:
-            $('[data-device="ipad"]').trigger('click');
+            $('[data-device="iPadMini"]').trigger('click');
             break;
           case 53:
-            $('[data-device="tablet"]').trigger('click');
+            $('[data-device="iphone6+"]').trigger('click');
             break;
           case 54:
-            $('[data-device="android"]').trigger('click');
+            $('[data-device="iphone6"]').trigger('click');
             break;
           case 55:
-            $('[data-device="iphone"]').trigger('click');
+            $('[data-device="iphone5"]').trigger('click');
             break;
           case 32:
           case 56:
