@@ -77,7 +77,7 @@ var VR = {
 
             this.showLoader();
             $('#btnVRClose').attr('href', urlParam);
-            this.setUA(W, ua);
+            //this.setUA(W, ua);
             this.setUA(this.$frame[0].id, ua);
             this.$frame.attr('src', urlParam);
             $('#vrPage').removeClass('hidden');
@@ -217,7 +217,7 @@ var initEvts = function() {
             'max-width': newWidth,
             'max-height': newHeight
         });
-        VR.setUA(W, ua);
+        //VR.setUA(W, ua);
         VR.setUA($frame[0].id, ua);
         e.preventDefault();
         return false;
