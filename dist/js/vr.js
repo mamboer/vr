@@ -43,8 +43,9 @@ var VR = {
     },
     init:function(){ 
         delete this.init;
+        this.hideOnMobile();
         //setup bookmarks   
-        $('[rel="bookmark"]').attr('href', "javascript:document.location='"+document.location+"?url=' + document.location.href;");
+        $('[rel="bookmark"]').attr('href', "javascript:document.location='" + document.location + "?url='" + "document.location.href;");
         this.$frame = $('#vrFrame');
         this.device = this.getDeviceFromCookie(this.getDeviceFromUrl());
         this.initUA();
@@ -54,6 +55,16 @@ var VR = {
         this.parseAddrBar();
         this.restore(this.device);
     },
+    hideOnMobile:function(){
+        var mobi = this.getParameterByName('mobi'),
+            url = this.getParameterByName('url'),
+            isMobi = /mobile/i.test(navigator.userAgent);
+
+        if(mobi ==='0' && isMobi && url.length>0){
+            location.href = url;
+            return;
+        }
+    }, 
     parseUrl:function(reload){
         // parse url parameter
         var urlParam = this.url = this.getParameterByName('url'),
