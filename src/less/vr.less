@@ -328,105 +328,6 @@ a[role="button"] {
     }
 }
 
-.ribbon {
-    display: block;
-    width: 100px;
-    height: 130px;
-    margin: -105px auto 0;
-    position: relative;
-    overflow: hidden;
-    transition: margin 500ms;
-    &-wrap {
-        position: fixed;
-        top: 0;
-        right: 10px;
-        z-index: 2;
-    }
-    &:hover, &:focus {
-        margin-top: 0;
-    }
-
-    .inset {
-        width: 200px;
-        height: 55px;
-        position: absolute;
-        top: -50px;
-        left: -10px;
-        z-index: 5;
-        border-radius: 50%;
-        background: rgba(0,0,0,0.3);
-        box-shadow: 0px 5px 10px 0px rgba(0,0,0,0.3);
-    }
-
-    &-cont {
-        position: absolute;
-        z-index: 3;
-        top: 0;
-        left: 0;
-        right: 0;
-        padding: 25px 10px;
-        font-size: 14px;
-        color: #fff;
-        &:after {
-          content: attr(title);
-        }
-    }
-
-    &-container {
-        position: relative;
-        width: 100px;
-        height: 150px;
-        overflow: hidden;
-        margin: 0 auto;
-    }
-
-    &-base {
-        height: 100px;
-        width: 100px;
-        background-color: #e74c3c;
-        border-color: #e43725;
-        background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#e74c3c), color-stop(100%,#e43725));
-        background: linear-gradient(to bottom,  #e74c3c 0%,#e43725 100%);
-        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e74c3c', endColorstr='#e43725',GradientType=0 );
-        position: relative;
-        z-index: 2;
-        &:after {
-            content: "";
-            position: absolute;
-            top: 0;
-            width: 86px;
-            left: 6px;
-            height: 103px;
-            border-left: 1px dashed #631a15;
-            border-right: 1px dashed #631a15;
-        }
-
-        &:before {
-            content: "";
-            position: absolute;
-            top: 0;
-            width: 86px;
-            left: 7px;
-            height: 103px;
-            border-left: 1px dashed #da5050;
-            border-right: 1px dashed #da5050;
-        }
-    }
-
-    &-end {
-        width: 0;
-        height: 0;
-        border-top: 30px solid #e43725;
-        border-left: 50px solid transparent;
-        border-right: 50px solid transparent;
-        position: absolute;
-        bottom: 20px;
-        left: 0;
-        right: 0;
-        z-index: 1;
-    }
-}
-
 .grab {
     cursor: url("../img/openhand.cur") 8 8, move;
     cursor: -webkit-grab;
@@ -522,9 +423,7 @@ label.visuallyhidden-with-placeholder{
     .vr-title {
         font-size:1.2em;
     }
-    .ribbon-wrap{
-        display:none;
-    }
+    
     .hide-on-mobile {
         display:none!important;
     }
