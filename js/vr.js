@@ -19,22 +19,6 @@ var VR = {
             evt.preventDefault();
         }
     },
-    createBookmarklet: function() {
-        var title = document.title,
-            address =  W.location.href,
-            elem;
-        if(W.sidebar) {
-            W.sidebar.addPanel(title,address);
-        } else if(W.external) {
-            W.external.AddFavorite(address,title);
-        } else if(W.opera && W.print) {
-            elem = document.createElement('a');
-            elem.setAttribute('href',address);
-            elem.setAttribute('title',title);
-            elem.setAttribute('rel','sidebar');
-            elem.click();
-        }
-    },
     getParameterByName: function(name) {
         name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
         var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
@@ -43,9 +27,9 @@ var VR = {
     },
     init:function(){ 
         delete this.init;
-        this.hideOnMobile();
-        //setup bookmarks   
-        $('[rel="bookmark"]').attr('href', "javascript:document.location='" + document.location + "?url='" + "document.location.href;");
+        if(this.hideOnMobile()){
+            return;    
+        }
         this.$frame = $('#vrFrame');
         this.device = this.getDeviceFromCookie(this.getDeviceFromUrl());
         this.initUA();
@@ -62,8 +46,9 @@ var VR = {
 
         if(mobi ==='0' && isMobi && url.length>0){
             location.href = url;
-            return;
+            return true;
         }
+        return false;
     }, 
     parseUrl:function(reload){
         // parse url parameter
@@ -94,7 +79,6 @@ var VR = {
             $('#vrPage').removeClass('hidden');
         } else {
             $('#indexPage').removeClass('hidden');
-            $('#ribbon-wrapper').removeClass('hidden');
         }
     },
     parseAddrBar: function(){
@@ -276,9 +260,6 @@ var initEvts = function() {
         }
     }).on('click', 'button[type="submit"]', function(e) {
         VR.ensureValidProtocol($(this).parents('form').find('[name="url"]'), e);
-    }).on('click', '[rel="bookmark"]', function(e) {
-        e.preventDefault();
-        return false;
     });
 
     $doc.on('keyup', function(e) {
