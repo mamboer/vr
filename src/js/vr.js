@@ -43,7 +43,9 @@ var VR = {
     },
     init:function(){ 
         delete this.init;
-        this.hideOnMobile();
+        if(this.hideOnMobile()){
+            return;    
+        }
         //setup bookmarks   
         $('[rel="bookmark"]').attr('href', "javascript:document.location='" + document.location + "?url='" + "document.location.href;");
         this.$frame = $('#vrFrame');
@@ -62,8 +64,9 @@ var VR = {
 
         if(mobi ==='0' && isMobi && url.length>0){
             location.href = url;
-            return;
+            return true;
         }
+        return false;
     }, 
     parseUrl:function(reload){
         // parse url parameter
